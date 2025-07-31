@@ -2,7 +2,7 @@
 
 import type { Transaction } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ArrowUpCircle, ArrowDownCircle, Wallet } from 'lucide-react';
+import { ArrowUpCircle, ArrowDownCircle, Wallet, Tag } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -50,9 +50,13 @@ const TransactionList = ({ transactions }: TransactionListProps) => {
               </div>
               <div className="grid gap-1">
                 <p className="font-semibold">{transaction.description}</p>
-                <p className="text-sm text-muted-foreground">
-                  {formatDate(transaction.date)}
-                </p>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Badge variant="outline" className="font-normal">{transaction.category}</Badge>
+                  <span>&bull;</span>
+                  <p>
+                    {formatDate(transaction.date)}
+                  </p>
+                </div>
               </div>
               <div className={cn(
                 "font-bold text-lg text-right",

@@ -32,6 +32,7 @@ import {
 
 const filterSchema = z.object({
   type: z.enum(['all', 'income', 'expense']).optional(),
+  category: z.string().optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
   minAmount: z.coerce.number().optional(),
@@ -49,6 +50,7 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
     resolver: zodResolver(filterSchema),
     defaultValues: {
       type: 'all',
+      category: 'all',
     },
   });
 
@@ -59,12 +61,13 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
   const handleClear = () => {
     form.reset({
       type: 'all',
+      category: 'all',
       startDate: undefined,
       endDate: undefined,
       minAmount: undefined,
       maxAmount: undefined,
     });
-    onFilterChange({ type: 'all' });
+    onFilterChange({ type: 'all', category: 'all' });
   };
 
   return (
@@ -78,7 +81,7 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
               <FormField
                 control={form.control}
                 name="type"
@@ -98,6 +101,36 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
                         <SelectItem value="all">Todas</SelectItem>
                         <SelectItem value="income">Entrada</SelectItem>
                         <SelectItem value="expense">Saída</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Categoria</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a categoria" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="all">Todas</SelectItem>
+                        <SelectItem value="Salário">Salário</SelectItem>
+                        <SelectItem value="Moradia">Moradia</SelectItem>
+                        <SelectItem value="Alimentação">Alimentação</SelectItem>
+                        <SelectItem value="Renda Extra">Renda Extra</SelectItem>
+                        <SelectItem value="Lazer">Lazer</SelectItem>
+                        <SelectItem value="Contas">Contas</SelectItem>
+                        <SelectItem value="Transporte">Transporte</SelectItem>
+                        <SelectItem value="Outros">Outros</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>

@@ -7,6 +7,7 @@ export const transactions: Transaction[] = [
     description: 'Salário de Julho',
     amount: 5000,
     type: 'income',
+    category: 'Salário',
   },
   {
     id: '2',
@@ -14,6 +15,7 @@ export const transactions: Transaction[] = [
     description: 'Aluguel',
     amount: 1500,
     type: 'expense',
+    category: 'Moradia',
   },
   {
     id: '3',
@@ -21,6 +23,7 @@ export const transactions: Transaction[] = [
     description: 'Compras no Supermercado',
     amount: 350.75,
     type: 'expense',
+    category: 'Alimentação',
   },
   {
     id: '4',
@@ -28,6 +31,7 @@ export const transactions: Transaction[] = [
     description: 'Venda de item usado',
     amount: 120,
     type: 'income',
+    category: 'Renda Extra',
   },
   {
     id: '5',
@@ -35,6 +39,7 @@ export const transactions: Transaction[] = [
     description: 'Jantar fora',
     amount: 85.5,
     type: 'expense',
+    category: 'Lazer',
   },
   {
     id: '6',
@@ -42,6 +47,7 @@ export const transactions: Transaction[] = [
     description: 'Conta de Internet',
     amount: 99.9,
     type: 'expense',
+    category: 'Contas',
   },
   {
     id: '7',
@@ -49,6 +55,7 @@ export const transactions: Transaction[] = [
     description: 'Reembolso de despesa',
     amount: 50,
     type: 'income',
+    category: 'Outros',
   },
   {
     id: '8',
@@ -56,6 +63,7 @@ export const transactions: Transaction[] = [
     description: 'Gasolina',
     amount: 180,
     type: 'expense',
+    category: 'Transporte',
   },
   {
     id: '9',
@@ -63,6 +71,7 @@ export const transactions: Transaction[] = [
     description: 'Pagamento Freelance',
     amount: 800,
     type: 'income',
+    category: 'Renda Extra',
   },
   {
     id: '10',
@@ -70,5 +79,6 @@ export const transactions: Transaction[] = [
     description: 'Ingressos para show',
     amount: 250,
     type: 'expense',
+    category: 'Lazer',
   },
 ];

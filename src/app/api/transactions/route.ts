@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const type = searchParams.get('type');
+  const category = searchParams.get('category');
   const startDate = searchParams.get('startDate');
   const endDate = searchParams.get('endDate');
   const minAmount = searchParams.get('minAmount');
@@ -16,6 +17,12 @@ export async function GET(request: NextRequest) {
   if (type === 'income' || type === 'expense') {
     filteredTransactions = filteredTransactions.filter(
       (transaction) => transaction.type === type
+    );
+  }
+
+  if (category && category !== 'all') {
+    filteredTransactions = filteredTransactions.filter(
+        (transaction) => transaction.category === category
     );
   }
 

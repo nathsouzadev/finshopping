@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 type Filters = {
   type?: 'income' | 'expense' | 'all';
+  category?: string;
   startDate?: Date;
   endDate?: Date;
   minAmount?: number;
@@ -18,7 +19,7 @@ type Filters = {
 
 export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filters, setFilters] = useState<Filters>({ type: 'all' });
+  const [filters, setFilters] = useState<Filters>({ type: 'all', category: 'all' });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchTransactions = useCallback(async (currentFilters: Filters) => {
@@ -26,6 +27,9 @@ export default function Home() {
     const params = new URLSearchParams();
     if (currentFilters.type && currentFilters.type !== 'all') {
       params.append('type', currentFilters.type);
+    }
+    if (currentFilters.category && currentFilters.category !== 'all') {
+      params.append('category', currentFilters.category);
     }
     if (currentFilters.startDate) {
       params.append('startDate', currentFilters.startDate.toISOString());

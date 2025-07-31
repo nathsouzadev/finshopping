@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -80,8 +79,8 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <FormField
                 control={form.control}
                 name="type"
@@ -136,7 +135,35 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
                   </FormItem>
                 )}
               />
+               <FormField
+                control={form.control}
+                name="minAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor Mínimo</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Ex: 50" {...field} value={field.value ?? ''}/>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
+                control={form.control}
+                name="maxAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor Máximo</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Ex: 1000" {...field} value={field.value ?? ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+               <FormField
                 control={form.control}
                 name="startDate"
                 render={({ field }) => (
@@ -164,40 +191,14 @@ const TransactionFilters = ({ onFilterChange }: TransactionFiltersProps) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="minAmount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Valor Mínimo</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="Ex: 50" {...field} value={field.value ?? ''}/>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="maxAmount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Valor Máximo</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="Ex: 1000" {...field} value={field.value ?? ''} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="lg:col-span-2 flex justify-end gap-2">
+                <Button type="button" variant="ghost" onClick={handleClear} className="w-full md:w-auto">
+                  Limpar Filtros
+                </Button>
+                <Button type="submit" className="w-full md:w-auto">Aplicar Filtros</Button>
+              </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={handleClear}>
-              Limpar Filtros
-            </Button>
-            <Button type="submit">Aplicar Filtros</Button>
-          </CardFooter>
         </form>
       </Form>
     </Card>

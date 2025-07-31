@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { transactions } from '@/lib/data';
+import type { Transaction } from '@/lib/types';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -59,4 +60,23 @@ export async function GET(request: NextRequest) {
   await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
 
   return NextResponse.json(filteredTransactions);
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body: Omit<Transaction, 'id'> = await request.json();
+
+    const newTransaction: Transaction = {
+      id: String(transactions.length + 1),
+      ...body,
+      date: new Date(body.date).toISOString(),
+    };
+
+    transactions.unshift(newTransaction); // Add to the beginning of the array
+
+    return NextResponse.json(newTransaction, { status: 201 });
+  } catch (error) {
+    console.error('Failed to create transaction', error);
+    return NextResponse.json({ message: 'Failed to create transaction' }, { status: 500 });
+  }
 }

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Logo from './logo';
 import { Button } from './ui/button';
-import { CircleUser } from 'lucide-react';
+import { CircleUser, PlusCircle } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import NewTransactionForm from './new-transaction-form';
+import type { Transaction } from '@/lib/types';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog';
 
-const Header = () => {
+const Header = ({ onNewTransaction }: { onNewTransaction: (transaction: Omit<Transaction, 'id'>) => void }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -25,7 +37,28 @@ const Header = () => {
       </nav>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <div className="ml-auto flex-1 sm:flex-initial">
-          {/* Future search bar can go here */}
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Nova Transação
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Nova Transação</DialogTitle>
+                <DialogDescription>
+                  Adicione uma nova entrada ou saída para gerenciar suas finanças.
+                </DialogDescription>
+              </DialogHeader>
+              <NewTransactionForm
+                onFormSubmit={(data) => {
+                  onNewTransaction(data);
+                  setIsDialogOpen(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

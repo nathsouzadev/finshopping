@@ -7,6 +7,7 @@ import SummaryCards from '@/components/summary-cards';
 import TransactionFilters from '@/components/transaction-filters';
 import TransactionList from '@/components/transaction-list';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 type Filters = {
   type?: 'income' | 'expense' | 'all';
@@ -21,6 +22,7 @@ export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filters, setFilters] = useState<Filters>({ type: 'all', category: 'all' });
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   const fetchTransactions = useCallback(async (currentFilters: Filters) => {
     setIsLoading(true);
@@ -53,15 +55,52 @@ export default function Home() {
       setTransactions(data);
     } catch (error) {
       console.error(error);
-      // Here you could show a toast notification to the user
+      toast({
+        title: 'Erro ao buscar transações',
+        description: 'Houve um problema ao carregar os dados. Tente novamente.',
+        variant: 'destructive',
+      });
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     fetchTransactions(filters);
   }, [filters, fetchTransactions]);
+
+  const handleNewTransaction = async (newTransactionData: Omit<Transaction, 'id'>) => {
+    try {
+      const response = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTransactionData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create transaction');
+      }
+
+      // Re-fetch transactions to show the new one
+      fetchTransactions(filters);
+      
+      toast({
+        title: 'Sucesso!',
+        description: 'Sua nova transação foi adicionada.',
+      });
+
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Erro ao criar transação',
+        description: 'Não foi possível salvar a nova transação. Tente novamente.',
+        variant: 'destructive',
+      });
+    }
+  };
+
 
   const summary = useMemo(() => {
     return transactions.reduce(
@@ -80,7 +119,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <Header />
+      <Header onNewTransaction={handleNewTransaction} />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 container mx-auto">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <SummaryCards summary={summary} isLoading={isLoading} />

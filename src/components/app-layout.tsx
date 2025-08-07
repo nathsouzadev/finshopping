@@ -41,30 +41,24 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <Link href="/" legacyBehavior passHref>
+              <Link href="/">
                 <SidebarMenuButton
                   isActive={pathname === '/'}
                   tooltip="Dashboard"
-                  asChild
                 >
-                  <a>
                     <LayoutDashboard />
                     <span>Dashboard</span>
-                  </a>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/settings" legacyBehavior passHref>
+              <Link href="/settings">
                 <SidebarMenuButton
                   isActive={pathname === '/settings'}
                   tooltip="Configurações"
-                  asChild
                 >
-                  <a>
                     <Settings />
                     <span>Configurações</span>
-                  </a>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

@@ -40,30 +40,28 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <Link href="/">
-                <SidebarMenuButton
-                  isActive={pathname === '/'}
-                  tooltip="Dashboard"
-                  asChild
-                >
-                  <Link href="/">
-                    <LayoutDashboard />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </Link>
+              <SidebarMenuButton
+                isActive={pathname === '/'}
+                tooltip="Dashboard"
+                asChild
+              >
+                <Link href="/">
+                  <LayoutDashboard />
+                  <span>Dashboard</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={pathname === '/shopping'}
-                  tooltip="Shopping"
-                  asChild
-                >
-                  <Link href="/shopping">
-                    <ShoppingCart />
-                    <span>Shopping</span>
-                  </Link>
-                </SidebarMenuButton>
+              <SidebarMenuButton
+                isActive={pathname === '/shopping'}
+                tooltip="Shopping"
+                asChild
+              >
+                <Link href="/shopping">
+                  <ShoppingCart />
+                  <span>Shopping</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton

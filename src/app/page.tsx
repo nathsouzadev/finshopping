@@ -8,6 +8,7 @@ import TransactionFilters from '@/components/transaction-filters';
 import TransactionList from '@/components/transaction-list';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+import { getApiUrl } from '@/lib/utils';
 
 type Filters = {
   type?: 'income' | 'expense' | 'all';
@@ -23,8 +24,14 @@ export default function Home() {
   const [filters, setFilters] = useState<Filters>({ type: 'all', category: 'all' });
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const [apiUrl, setApiUrl] = useState('');
+
+  useEffect(() => {
+    setApiUrl(getApiUrl());
+  }, []);
 
   const fetchTransactions = useCallback(async (currentFilters: Filters) => {
+    if (!apiUrl) return;
     setIsLoading(true);
     const params = new URLSearchParams();
     if (currentFilters.type && currentFilters.type !== 'all') {
@@ -47,7 +54,7 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch(`/api/transactions?${params.toString()}`);
+      const response = await fetch(`${apiUrl}?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to fetch transactions');
       }
@@ -57,21 +64,22 @@ export default function Home() {
       console.error(error);
       toast({
         title: 'Erro ao buscar transações',
-        description: 'Houve um problema ao carregar os dados. Tente novamente.',
+        description: 'Houve um problema ao carregar os dados. Verifique a URL da API nas configurações ou tente novamente.',
         variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  }, [toast, apiUrl]);
 
   useEffect(() => {
     fetchTransactions(filters);
   }, [filters, fetchTransactions]);
 
   const handleNewTransaction = async (newTransactionData: Omit<Transaction, 'id'>) => {
+    if (!apiUrl) return;
     try {
-      const response = await fetch('/api/transactions', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

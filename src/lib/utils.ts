@@ -4,3 +4,10 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export const getApiUrl = () => {
+  if (typeof window === 'undefined') {
+    return '/api/transactions';
+  }
+  return localStorage.getItem('apiUrl') || '/api/transactions';
+};

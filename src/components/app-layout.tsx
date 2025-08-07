@@ -46,10 +46,10 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
                   tooltip="Dashboard"
                   asChild
                 >
-                  <>
+                  <div>
                     <LayoutDashboard />
                     <span>Dashboard</span>
-                  </>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -60,10 +60,10 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
                   tooltip="Shopping"
                   asChild
                 >
-                  <>
+                  <div>
                     <ShoppingCart />
                     <span>Shopping</span>
-                  </>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -74,10 +74,10 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
                   tooltip="Minhas Compras"
                   asChild
                 >
-                  <>
+                  <div>
                     <History />
                     <span>Minhas Compras</span>
-                  </>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -88,10 +88,10 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
                   tooltip="Configurações"
                   asChild
                 >
-                  <>
+                  <div>
                     <Settings />
                     <span>Configurações</span>
-                  </>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

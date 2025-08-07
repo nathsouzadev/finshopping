@@ -15,6 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function ShoppingPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [cart, setCart] = useState<Map<number, number>>(new Map());
   const { toast } = useToast();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -87,14 +88,43 @@ export default function ShoppingPage() {
     setIsAlertOpen(true);
   };
   
-  const handleConfirmPurchase = () => {
-    console.log('Compra confirmada:', { cart, total });
+  const handleConfirmPurchase = async () => {
+    setIsProcessing(true);
     setIsAlertOpen(false);
-    setCart(new Map());
-    toast({
-        title: 'Compra realizada com sucesso!',
-        description: `O valor total da sua compra foi de ${formatCurrency(total)}.`,
-    });
+
+    try {
+        const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cart: Array.from(cart.entries()).map(([productId, quantity]) => ({ productId, quantity })),
+                total,
+            }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Erro ao processar a compra.');
+        }
+
+        setCart(new Map());
+        toast({
+            title: 'Compra realizada com sucesso!',
+            description: `O valor total da sua compra foi de ${formatCurrency(total)}.`,
+        });
+
+    } catch (error: any) {
+        toast({
+            title: 'Erro na compra',
+            description: error.message || 'Não foi possível finalizar a sua compra. Tente novamente.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsProcessing(false);
+    }
   }
 
   return (
@@ -142,9 +172,9 @@ export default function ShoppingPage() {
                    <div className="text-xl font-bold">
                         Total: {formatCurrency(total)}
                    </div>
-                   <Button onClick={handleCheckout} disabled={total <= 0 || isLoading}>
+                   <Button onClick={handleCheckout} disabled={total <= 0 || isLoading || isProcessing}>
                         <ShoppingCart className="mr-2 h-4 w-4" />
-                        Comprar
+                        {isProcessing ? 'Processando...' : 'Comprar'}
                    </Button>
                 </CardFooter>
             </Card>
@@ -162,7 +192,9 @@ export default function ShoppingPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <Button variant="outline" onClick={() => setIsAlertOpen(false)}>Cancelar</Button>
-            <AlertDialogAction onClick={handleConfirmPurchase}>Confirmar</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirmPurchase} disabled={isProcessing}>
+                {isProcessing ? 'Confirmando...' : 'Confirmar'}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

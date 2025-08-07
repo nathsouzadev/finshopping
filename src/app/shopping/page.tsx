@@ -1,22 +1,48 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import AppLayout from '@/components/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { products } from '@/lib/products';
 import type { Product } from '@/lib/types';
 import { MinusCircle, PlusCircle, ShoppingCart } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 export default function ShoppingPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState<Map<number, number>>(new Map());
   const { toast } = useToast();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: 'Erro ao buscar produtos',
+          description: 'Não foi possível carregar os produtos da loja.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [toast]);
 
   const handleQuantityChange = (product: Product, change: number) => {
     const newCart = new Map(cart);
@@ -40,7 +66,7 @@ export default function ShoppingPage() {
       }
     }
     return total;
-  }, [cart]);
+  }, [cart, products]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('pt-BR', {
@@ -85,30 +111,38 @@ export default function ShoppingPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {products.map((product) => (
-                        <div key={product.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
-                            <div>
-                                <p className="font-semibold">{product.name}</p>
-                                <p className="text-sm text-muted-foreground">{formatCurrency(product.price)}</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="icon" onClick={() => handleQuantityChange(product, -1)} disabled={(cart.get(product.id) || 0) === 0}>
-                                    <MinusCircle className="h-5 w-5" />
-                                </Button>
-                                <span className="w-10 text-center font-bold">{cart.get(product.id) || 0}</span>
-                                <Button variant="ghost" size="icon" onClick={() => handleQuantityChange(product, 1)}>
-                                    <PlusCircle className="h-5 w-5" />
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
+                    {isLoading ? (
+                      <div className="space-y-4">
+                        <Skeleton className="h-12 w-full" />
+                        <Skeleton className="h-12 w-full" />
+                        <Skeleton className="h-12 w-full" />
+                      </div>
+                    ) : (
+                      products.map((product) => (
+                          <div key={product.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                              <div>
+                                  <p className="font-semibold">{product.name}</p>
+                                  <p className="text-sm text-muted-foreground">{formatCurrency(product.price)}</p>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                  <Button variant="ghost" size="icon" onClick={() => handleQuantityChange(product, -1)} disabled={(cart.get(product.id) || 0) === 0}>
+                                      <MinusCircle className="h-5 w-5" />
+                                  </Button>
+                                  <span className="w-10 text-center font-bold">{cart.get(product.id) || 0}</span>
+                                  <Button variant="ghost" size="icon" onClick={() => handleQuantityChange(product, 1)}>
+                                      <PlusCircle className="h-5 w-5" />
+                                  </Button>
+                              </div>
+                          </div>
+                      ))
+                    )}
                 </CardContent>
                 <Separator className="my-4" />
                 <CardFooter className="flex flex-col items-end gap-4">
                    <div className="text-xl font-bold">
                         Total: {formatCurrency(total)}
                    </div>
-                   <Button onClick={handleCheckout} disabled={total <= 0}>
+                   <Button onClick={handleCheckout} disabled={total <= 0 || isLoading}>
                         <ShoppingCart className="mr-2 h-4 w-4" />
                         Comprar
                    </Button>

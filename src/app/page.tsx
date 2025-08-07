@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { Transaction } from '@/lib/types';
-import Header from '@/components/header';
 import SummaryCards from '@/components/summary-cards';
 import TransactionFilters from '@/components/transaction-filters';
 import TransactionList from '@/components/transaction-list';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { getApiUrl } from '@/lib/utils';
+import AppLayout from '@/components/app-layout';
 
 type Filters = {
   type?: 'income' | 'expense' | 'all';
@@ -126,9 +126,8 @@ export default function Home() {
   }, [transactions]);
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <Header onNewTransaction={handleNewTransaction} />
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 container mx-auto">
+    <AppLayout onNewTransaction={handleNewTransaction}>
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <SummaryCards summary={summary} isLoading={isLoading} />
         </div>
@@ -146,6 +145,6 @@ export default function Home() {
           )}
         </div>
       </main>
-    </div>
+    </AppLayout>
   );
 }

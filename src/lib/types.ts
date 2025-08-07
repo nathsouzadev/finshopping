@@ -12,3 +12,17 @@ export type Product = {
   name: string;
   price: number;
 };
+
+export type CartItem = {
+  productId: number;
+  quantity: number;
+  name: string;
+  price: number;
+};
+
+export type Purchase = {
+  id: string;
+  date: string;
+  total: number;
+  items: CartItem[];
+};

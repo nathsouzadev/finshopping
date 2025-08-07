@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import Header from '@/components/header';
 import Logo from '@/components/logo';
-import { LayoutDashboard, Settings, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Settings, ShoppingCart, History } from 'lucide-react';
 import type { Transaction } from '@/lib/types';
 
 
@@ -40,40 +40,60 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                isActive={pathname === '/'}
-                tooltip="Dashboard"
-                asChild
-              >
-                <Link href="/">
-                  <LayoutDashboard />
-                  <span>Dashboard</span>
-                </Link>
-              </SidebarMenuButton>
+              <Link href="/">
+                <SidebarMenuButton
+                  isActive={pathname === '/'}
+                  tooltip="Dashboard"
+                  asChild
+                >
+                  <>
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                isActive={pathname === '/shopping'}
-                tooltip="Shopping"
-                asChild
-              >
-                <Link href="/shopping">
-                  <ShoppingCart />
-                  <span>Shopping</span>
-                </Link>
-              </SidebarMenuButton>
+              <Link href="/shopping">
+                <SidebarMenuButton
+                  isActive={pathname === '/shopping'}
+                  tooltip="Shopping"
+                  asChild
+                >
+                  <>
+                    <ShoppingCart />
+                    <span>Shopping</span>
+                  </>
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <Link href="/purchases">
+                <SidebarMenuButton
+                  isActive={pathname === '/purchases'}
+                  tooltip="Minhas Compras"
+                  asChild
+                >
+                  <>
+                    <History />
+                    <span>Minhas Compras</span>
+                  </>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                isActive={pathname === '/settings'}
-                tooltip="Configurações"
-                asChild
-              >
-                <Link href="/settings">
-                  <Settings />
-                  <span>Configurações</span>
-                </Link>
-              </SidebarMenuButton>
+              <Link href="/settings">
+                <SidebarMenuButton
+                  isActive={pathname === '/settings'}
+                  tooltip="Configurações"
+                  asChild
+                >
+                  <>
+                    <Settings />
+                    <span>Configurações</span>
+                  </>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>

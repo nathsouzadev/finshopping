@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { purchases } from '@/lib/data';
+import { products } from '@/lib/products';
+import type { CartItem } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,8 +17,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'O valor total da compra excede o limite de R$20.000.' }, { status: 400 });
     }
 
-    // Simulate processing the order
-    console.log('Pedido recebido:', { cart, total });
+    const items: CartItem[] = cart.map((item: {productId: number, quantity: number}) => {
+        const product = products.find(p => p.id === item.productId);
+        return {
+            ...item,
+            name: product?.name || 'Produto desconhecido',
+            price: product?.price || 0,
+        }
+    });
+
+    const newPurchase = {
+        id: String(purchases.length + 1),
+        date: new Date().toISOString(),
+        total,
+        items,
+    };
+
+    purchases.unshift(newPurchase);
+
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing delay
 
     return NextResponse.json({ message: 'Compra processada com sucesso!' }, { status: 200 });

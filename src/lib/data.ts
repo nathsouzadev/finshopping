@@ -1,4 +1,4 @@
-import type { Transaction } from './types';
+import type { Transaction, Purchase } from './types';
 
 export const transactions: Transaction[] = [
   {
@@ -82,3 +82,5 @@ export const transactions: Transaction[] = [
     category: 'Lazer',
   },
 ];
+
+export const purchases: Purchase[] = [];

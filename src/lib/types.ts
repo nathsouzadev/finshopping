@@ -6,3 +6,9 @@ export type Transaction = {
   type: 'income' | 'expense';
   category: string;
 };
+
+export type Product = {
+  id: number;
+  name: string;
+  price: number;
+};

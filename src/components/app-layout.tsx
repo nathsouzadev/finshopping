@@ -11,11 +11,10 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import Header from '@/components/header';
 import Logo from '@/components/logo';
-import { LayoutDashboard, Settings } from 'lucide-react';
+import { LayoutDashboard, Settings, ShoppingCart } from 'lucide-react';
 import type { Transaction } from '@/lib/types';
 
 
@@ -45,22 +44,38 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
                 <SidebarMenuButton
                   isActive={pathname === '/'}
                   tooltip="Dashboard"
+                  asChild
                 >
+                  <Link href="/">
                     <LayoutDashboard />
                     <span>Dashboard</span>
+                  </Link>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/settings">
                 <SidebarMenuButton
-                  isActive={pathname === '/settings'}
-                  tooltip="Configurações"
+                  isActive={pathname === '/shopping'}
+                  tooltip="Shopping"
+                  asChild
                 >
-                    <Settings />
-                    <span>Configurações</span>
+                  <Link href="/shopping">
+                    <ShoppingCart />
+                    <span>Shopping</span>
+                  </Link>
                 </SidebarMenuButton>
-              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={pathname === '/settings'}
+                tooltip="Configurações"
+                asChild
+              >
+                <Link href="/settings">
+                  <Settings />
+                  <span>Configurações</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>

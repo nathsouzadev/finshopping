@@ -11,6 +11,7 @@ import type { Purchase, CartItem } from '@/lib/types';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { History } from 'lucide-react';
+import { getApiUrl } from '@/lib/utils';
 
 export default function PurchasesPage() {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
@@ -21,7 +22,8 @@ export default function PurchasesPage() {
     const fetchPurchases = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/purchases');
+        const apiUrl = getApiUrl('/purchases');
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error('Failed to fetch purchase history');
         }

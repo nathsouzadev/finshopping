@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -21,72 +22,187 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getApiUrl } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Separator } from './ui/separator';
+import { Skeleton } from './ui/skeleton';
+import { Badge } from './ui/badge';
+import { cn } from '@/lib/utils';
 
 const settingsSchema = z.object({
-  apiUrl: z.string().url({ message: "Por favor, insira uma URL válida." }).or(z.literal('')),
+  apiBaseUrl: z.string().url({ message: "Por favor, insira uma URL válida." }).or(z.literal('')),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
 
+interface ApiResponse {
+  status: number;
+  body: any;
+}
+
 const SettingsForm = () => {
   const { toast } = useToast();
+  const [isSaving, setIsSaving] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
+  const [selectedEndpoint, setSelectedEndpoint] = useState<string>('/transactions');
+  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      apiUrl: '',
+      apiBaseUrl: '',
     },
   });
 
   useEffect(() => {
-    const storedApiUrl = localStorage.getItem('apiUrl');
+    const storedApiUrl = localStorage.getItem('apiBaseUrl');
     if (storedApiUrl) {
-      form.setValue('apiUrl', storedApiUrl);
+      form.setValue('apiBaseUrl', storedApiUrl);
     }
   }, [form]);
 
-  const onSubmit = (data: SettingsFormValues) => {
-    if (data.apiUrl) {
-      localStorage.setItem('apiUrl', data.apiUrl);
-    } else {
-      localStorage.removeItem('apiUrl');
+  const testApiUrl = async (url: string): Promise<boolean> => {
+    try {
+      // We test the transactions endpoint as a prerequisite
+      const testUrl = `${url.replace(/\/$/, '')}/transactions`;
+      const response = await fetch(testUrl);
+      return response.ok;
+    } catch (error) {
+      console.error("API test failed", error);
+      return false;
     }
-    toast({
-      title: 'Configurações salvas!',
-      description: 'A URL da API foi atualizada com sucesso.',
-    });
   };
 
+  const onSubmit = async (data: SettingsFormValues) => {
+    setIsSaving(true);
+    const { apiBaseUrl } = data;
+
+    const isApiValid = await testApiUrl(apiBaseUrl || '/api');
+
+    if (isApiValid) {
+      if (apiBaseUrl) {
+        localStorage.setItem('apiBaseUrl', apiBaseUrl);
+      } else {
+        localStorage.removeItem('apiBaseUrl');
+      }
+      toast({
+        title: 'Configurações salvas!',
+        description: 'A URL base da API foi atualizada. A aplicação será recarregada.',
+      });
+      // Reload the page to refetch all data with the new URL
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      toast({
+        title: 'Falha na conexão',
+        description: 'Não foi possível conectar à URL base fornecida. Verifique a URL e tente novamente.',
+        variant: 'destructive',
+      });
+    }
+    setIsSaving(false);
+  };
+  
+  const handleTestEndpoint = async () => {
+    setIsTesting(true);
+    setApiResponse(null);
+    try {
+        const testUrl = getApiUrl(selectedEndpoint);
+        const response = await fetch(testUrl);
+        const body = await response.json();
+        setApiResponse({ status: response.status, body });
+    } catch (error: any) {
+        setApiResponse({ status: 500, body: { error: "Failed to fetch", message: error.message } });
+    } finally {
+        setIsTesting(false);
+    }
+  }
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>API de Transações</CardTitle>
-        <CardDescription>
-          Configure a URL da API para buscar e criar transações. Se deixado em branco,
-          o aplicativo usará a API interna de exemplo.
-        </CardDescription>
-      </CardHeader>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4">
-            <FormField
-              control={form.control}
-              name="apiUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL da API</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://sua-api.com/transacoes" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Salvar</Button>
-          </CardContent>
-        </form>
-      </Form>
-    </Card>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Configuração da API</CardTitle>
+          <CardDescription>
+            Configure a URL base para buscar e criar dados. Se deixado em branco,
+            o aplicativo usará a API interna de exemplo.
+          </CardDescription>
+        </CardHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="apiBaseUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>URL Base da API</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://sua-api.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+            <CardFooter>
+                <Button type="submit" disabled={isSaving}>
+                    {isSaving ? 'Salvando...' : 'Salvar e Recarregar'}
+                </Button>
+            </CardFooter>
+          </form>
+        </Form>
+      </Card>
+
+      <Card>
+        <CardHeader>
+            <CardTitle>Testar Endpoints da API</CardTitle>
+            <CardDescription>
+                Use o seletor abaixo para testar diferentes endpoints com a URL base configurada.
+            </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+            <div className="flex items-center gap-4">
+                <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
+                    <SelectTrigger className="w-[280px]">
+                        <SelectValue placeholder="Selecione um endpoint" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="/transactions">/transactions</SelectItem>
+                        <SelectItem value="/products">/products</SelectItem>
+                        <SelectItem value="/purchases">/purchases</SelectItem>
+                    </SelectContent>
+                </Select>
+                <Button onClick={handleTestEndpoint} disabled={isTesting}>
+                    {isTesting ? 'Testando...' : 'Testar Rota'}
+                </Button>
+            </div>
+
+            {isTesting && (
+                <div className='space-y-2'>
+                    <Skeleton className="h-6 w-32" />
+                    <Skeleton className="h-48 w-full" />
+                </div>
+            )}
+            
+            {apiResponse && (
+                <div className='space-y-2 pt-4'>
+                    <h3 className="font-semibold">Resposta</h3>
+                    <div className="flex items-center gap-2">
+                        <span>Status:</span>
+                         <Badge variant={apiResponse.status >= 200 && apiResponse.status < 300 ? 'secondary' : 'destructive'} className={cn(apiResponse.status >= 200 && apiResponse.status < 300 && 'text-emerald-600 border-emerald-600')}>
+                            {apiResponse.status}
+                        </Badge>
+                    </div>
+                    <pre className="p-4 bg-muted rounded-md text-sm overflow-x-auto">
+                        <code>
+                            {JSON.stringify(apiResponse.body, null, 2)}
+                        </code>
+                    </pre>
+                </div>
+            )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

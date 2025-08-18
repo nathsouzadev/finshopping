@@ -10,6 +10,7 @@ import type { Product } from '@/lib/types';
 import { MinusCircle, PlusCircle, ShoppingCart } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getApiUrl } from '@/lib/utils';
 
 
 export default function ShoppingPage() {
@@ -24,7 +25,8 @@ export default function ShoppingPage() {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/products');
+        const apiUrl = getApiUrl('/products');
+        const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -93,7 +95,8 @@ export default function ShoppingPage() {
     setIsAlertOpen(false);
 
     try {
-        const response = await fetch('/api/checkout', {
+        const apiUrl = getApiUrl('/checkout');
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

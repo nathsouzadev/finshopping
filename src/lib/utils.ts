@@ -5,9 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const getApiUrl = () => {
+export const getApiUrl = (path: string) => {
   if (typeof window === 'undefined') {
-    return '/api/transactions';
+    return `/api${path}`;
   }
-  return localStorage.getItem('apiUrl') || '/api/transactions';
+  const baseUrl = localStorage.getItem('apiBaseUrl');
+  if (baseUrl) {
+    // Ensure no double slashes
+    return `${baseUrl.replace(/\/$/, '')}${path}`;
+  }
+  return `/api${path}`;
 };

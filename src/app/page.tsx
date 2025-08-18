@@ -24,14 +24,8 @@ export default function Home() {
   const [filters, setFilters] = useState<Filters>({ type: 'all', category: 'all' });
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
-  const [apiUrl, setApiUrl] = useState('');
-
-  useEffect(() => {
-    setApiUrl(getApiUrl());
-  }, []);
-
+  
   const fetchTransactions = useCallback(async (currentFilters: Filters) => {
-    if (!apiUrl) return;
     setIsLoading(true);
     const params = new URLSearchParams();
     if (currentFilters.type && currentFilters.type !== 'all') {
@@ -54,6 +48,7 @@ export default function Home() {
     }
 
     try {
+      const apiUrl = getApiUrl('/transactions');
       const response = await fetch(`${apiUrl}?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Failed to fetch transactions');
@@ -70,15 +65,15 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [toast, apiUrl]);
+  }, [toast]);
 
   useEffect(() => {
     fetchTransactions(filters);
   }, [filters, fetchTransactions]);
 
   const handleNewTransaction = async (newTransactionData: Omit<Transaction, 'id'>) => {
-    if (!apiUrl) return;
     try {
+      const apiUrl = getApiUrl('/transactions');
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {

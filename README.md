@@ -43,7 +43,7 @@ A aplicação utiliza uma API interna para simular operações de backend. Todos
 
 #### `GET /api/products`
 
-Retorna a lista de todos os produtos disponíveis na loja.
+Retorna la lista de todos os produtos disponíveis na loja.
 
 - **Método:** `GET`
 - **Resposta de Sucesso (200 OK):**
@@ -125,6 +125,31 @@ Retorna uma lista de transações financeiras. A lista pode ser filtrada usando 
   ]
   ```
 
+#### `GET /api/transactions/{id}`
+
+Retorna uma transação específica pelo seu ID.
+
+- **Método:** `GET`
+- **Parâmetros da Rota:**
+  - `id`: `string` (O ID da transação)
+- **Resposta de Sucesso (200 OK):**
+  ```json
+  {
+    "id": "1",
+    "date": "2024-07-15T10:00:00Z",
+    "description": "Salário de Julho",
+    "amount": 5000,
+    "type": "income",
+    "category": "Salário"
+  }
+  ```
+- **Resposta de Erro (404 Not Found):**
+  ```json
+  {
+    "message": "Transação não encontrada."
+  }
+  ```
+  
 #### `POST /api/transactions`
 
 Cria uma nova transação financeira.
@@ -217,25 +242,42 @@ Retorna o histórico de todas as compras realizadas, ordenadas da mais recente p
           "price": 350
         }
       ]
-    },
-    {
-      "id": "2",
-      "date": "2024-07-25T10:20:30Z",
-      "total": 3100,
-      "items": [
-        {
-          "productId": 4,
-          "quantity": 1,
-          "name": "Monitor 4K 27\"",
-          "price": 2500
-        },
-        {
-          "productId": 5,
-          "quantity": 1,
-          "name": "Headset 7.1 Surround",
-          "price": 600
-        }
-      ]
     }
   ]
+  ```
+
+#### `GET /api/purchases/{id}`
+
+Retorna uma compra específica pelo seu ID.
+
+- **Método:** `GET`
+- **Parâmetros da Rota:**
+  - `id`: `string` (O ID da compra)
+- **Resposta de Sucesso (200 OK):**
+  ```json
+  {
+    "id": "1",
+    "date": "2024-07-28T14:45:12Z",
+    "total": 7850,
+    "items": [
+      {
+        "productId": 1,
+        "quantity": 1,
+        "name": "Notebook Gamer Pro",
+        "price": 7500
+      },
+      {
+        "productId": 2,
+        "quantity": 1,
+        "name": "Mouse Sem Fio Ultra-leve",
+        "price": 350
+      }
+    ]
+  }
+  ```
+- **Resposta de Erro (404 Not Found):**
+  ```json
+  {
+    "message": "Compra não encontrada."
+  }
   ```

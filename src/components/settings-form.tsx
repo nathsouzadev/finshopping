@@ -25,7 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
 import { getApiUrl } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Separator } from './ui/separator';
+import { Label } from '@/components/ui/label';
 import { Skeleton } from './ui/skeleton';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';

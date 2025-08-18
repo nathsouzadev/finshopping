@@ -33,12 +33,12 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
           <div className="flex items-center gap-2">
             <Logo className="h-6 w-6 text-primary" />
             <span className="font-bold text-xl group-data-[collapsible=icon]:hidden">
-              Fino
+              FinShopping
             </span>
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarMenu>
+          <SidebarMenu className='p-2'>
             <SidebarMenuItem>
               <Link href="/">
                 <SidebarMenuButton

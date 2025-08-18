@@ -36,8 +36,8 @@ const Header = ({ onNewTransaction }: { onNewTransaction: (transaction: Omit<Tra
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                 <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Nova Transação
+                    <PlusCircle className="h-4 w-4" />
+                    <span className="hidden sm:inline ml-2">Nova Transação</span>
                 </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">

@@ -162,11 +162,11 @@ const SettingsForm = () => {
             </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-            <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
-                <div className="flex-grow w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4">
+                <div className="flex-grow w-full sm:w-auto">
                     <Label htmlFor="endpoint-select">Endpoint</Label>
                     <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
-                        <SelectTrigger id="endpoint-select" className="w-full md:w-[280px]">
+                        <SelectTrigger id="endpoint-select" className="w-full sm:w-[200px]">
                             <SelectValue placeholder="Selecione um endpoint" />
                         </SelectTrigger>
                         <SelectContent>
@@ -176,7 +176,7 @@ const SettingsForm = () => {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="flex-grow w-full md:w-auto">
+                <div className="flex-grow w-full sm:w-auto">
                    <Label htmlFor="query-params">Parâmetros (opcional)</Label>
                    <Input 
                         id="query-params"
@@ -186,7 +186,7 @@ const SettingsForm = () => {
                         className="w-full"
                     />
                 </div>
-                <Button onClick={handleTestEndpoint} disabled={isTesting} className="w-full md:w-auto">
+                <Button onClick={handleTestEndpoint} disabled={isTesting} className="w-full sm:w-auto">
                     {isTesting ? 'Testando...' : 'Testar Rota'}
                 </Button>
             </div>

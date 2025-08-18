@@ -86,13 +86,13 @@ export default function PurchasesPage() {
                                 </div>
                                 <div className="text-right">
                                     <p className="font-bold text-lg text-primary">{formatCurrency(purchase.total)}</p>
-                                    <Badge variant="secondary">{purchase.items.length} {purchase.items.length === 1 ? 'item' : 'itens'}</Badge>
+                                    <Badge variant="secondary">{(purchase.items || []).length} {(purchase.items || []).length === 1 ? 'item' : 'itens'}</Badge>
                                 </div>
                             </div>
                         </AccordionTrigger>
                         <AccordionContent>
                            <div className="space-y-2 pt-2">
-                             {purchase.items.map((item) => (
+                             {(purchase.items || []).map((item) => (
                                 <div key={item.productId} className="flex justify-between items-center p-2 rounded-md bg-muted/50">
                                     <div>
                                         <p className="font-semibold">{item.name}</p>

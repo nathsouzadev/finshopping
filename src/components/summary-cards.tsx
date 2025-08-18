@@ -1,6 +1,7 @@
 import { DollarSign, ArrowUpCircle, ArrowDownCircle, Banknote } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from './ui/skeleton';
+import { cn } from '@/lib/utils';
 
 interface Summary {
   income: number;
@@ -83,7 +84,7 @@ const SummaryCardRefactored = ({ title, value, icon: Icon, isLoading, valueColor
           </>
         ) : (
           <>
-            <div className={`text-2xl font-bold ${valueColorClass}`}>
+            <div className={cn('text-2xl font-bold', valueColorClass)}>
               {displayValue}
             </div>
             <p className="text-xs text-muted-foreground">{description}</p>
@@ -96,9 +97,15 @@ const SummaryCardRefactored = ({ title, value, icon: Icon, isLoading, valueColor
 
 
 const SummaryCardsComponent = ({ summary, isLoading }: SummaryCardsProps) => {
+  const getBalanceColor = (balance: number) => {
+    if (balance > 0) return 'text-emerald-600';
+    if (balance < 0) return 'text-red-600';
+    return 'text-foreground';
+  }
+
   return (
     <>
-      <SummaryCardRefactored title="Saldo Atual" value={summary.balance} icon={Banknote} isLoading={isLoading} valueColorClass="text-primary" description="Balanço total de suas contas" />
+      <SummaryCardRefactored title="Saldo Atual" value={summary.balance} icon={Banknote} isLoading={isLoading} valueColorClass={getBalanceColor(summary.balance)} description="Balanço total de suas contas" />
       <SummaryCardRefactored title="Entradas" value={summary.income} icon={ArrowUpCircle} isLoading={isLoading} valueColorClass="text-emerald-600" description="Total de receitas no período" />
       <SummaryCardRefactored title="Saídas" value={summary.expense} icon={ArrowDownCircle} isLoading={isLoading} valueColorClass="text-red-600" description="Total de despesas no período" />
       <SummaryCardRefactored title="Taxa de Economia" value={summary.income > 0 ? (summary.balance / summary.income) * 100 : 0} icon={DollarSign} isLoading={isLoading} description="Percentual de economia" valueFormatter={(v) => isNaN(v) ? '0.00%' : `${v.toFixed(2)}%`} />
@@ -108,4 +115,3 @@ const SummaryCardsComponent = ({ summary, isLoading }: SummaryCardsProps) => {
 
 
 export default SummaryCardsComponent;
-

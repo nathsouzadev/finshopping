@@ -118,10 +118,21 @@ export default function DocumentationPage() {
                                         <span>/api/checkout</span>
                                     </h3>
                                     <p className="text-muted-foreground mt-1">Processa uma nova compra a partir do carrinho.</p>
-                                     <p className="font-semibold mt-4">Resposta de Sucesso (200 OK):</p>
+                                     <p className="font-semibold mt-4">Resposta de Sucesso (201 Created):</p>
                                     <CodeBlock>{`{
-    "message": "Compra processada com sucesso!"
-}`}</CodeBlock>
+    "id": "4",
+    "date": "2024-07-29T10:00:00.000Z",
+    "total": 8200,
+    "items": [
+        {
+          "productId": 1,
+          "quantity": 1,
+          "name": "Notebook Gamer Pro",
+          "price": 7500
+        },
+        ...
+    ]
+  }`}</CodeBlock>
                                     <p className="font-semibold mt-4">Resposta de Erro (400 Bad Request):</p>
                                     <CodeBlock>{`// Se o total exceder 20.000
 {

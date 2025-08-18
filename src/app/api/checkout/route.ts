@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing delay
 
-    return NextResponse.json({ message: 'Compra processada com sucesso!' }, { status: 200 });
+    return NextResponse.json(newPurchase, { status: 201 });
 
   } catch (error) {
     console.error('Erro ao processar a compra:', error);

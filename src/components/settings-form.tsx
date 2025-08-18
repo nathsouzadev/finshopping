@@ -47,6 +47,7 @@ const SettingsForm = () => {
   const [isTesting, setIsTesting] = useState(false);
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>('/transactions');
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+  const [queryParams, setQueryParams] = useState('');
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(settingsSchema),
@@ -106,7 +107,7 @@ const SettingsForm = () => {
     setIsTesting(true);
     setApiResponse(null);
     try {
-        const testUrl = getApiUrl(selectedEndpoint);
+        const testUrl = getApiUrl(selectedEndpoint) + queryParams;
         const response = await fetch(testUrl);
         const body = await response.json();
         setApiResponse({ status: response.status, body });
@@ -161,18 +162,31 @@ const SettingsForm = () => {
             </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-                <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
-                    <SelectTrigger className="w-[280px]">
-                        <SelectValue placeholder="Selecione um endpoint" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="/transactions">/transactions</SelectItem>
-                        <SelectItem value="/products">/products</SelectItem>
-                        <SelectItem value="/purchases">/purchases</SelectItem>
-                    </SelectContent>
-                </Select>
-                <Button onClick={handleTestEndpoint} disabled={isTesting}>
+            <div className="flex flex-col md:flex-row items-start md:items-end gap-4">
+                <div className="flex-grow w-full md:w-auto">
+                    <Label htmlFor="endpoint-select">Endpoint</Label>
+                    <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
+                        <SelectTrigger id="endpoint-select" className="w-full md:w-[280px]">
+                            <SelectValue placeholder="Selecione um endpoint" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="/transactions">/transactions</SelectItem>
+                            <SelectItem value="/products">/products</SelectItem>
+                            <SelectItem value="/purchases">/purchases</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex-grow w-full md:w-auto">
+                   <Label htmlFor="query-params">Parâmetros (opcional)</Label>
+                   <Input 
+                        id="query-params"
+                        placeholder="/:id ou ?chave=valor" 
+                        value={queryParams}
+                        onChange={(e) => setQueryParams(e.target.value)}
+                        className="w-full"
+                    />
+                </div>
+                <Button onClick={handleTestEndpoint} disabled={isTesting} className="w-full md:w-auto">
                     {isTesting ? 'Testando...' : 'Testar Rota'}
                 </Button>
             </div>

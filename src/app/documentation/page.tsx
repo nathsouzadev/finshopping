@@ -1,16 +1,45 @@
 "use client";
 
+import { useState } from "react";
 import AppLayout from "@/components/app-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Copy, Check } from "lucide-react";
 
-const CodeBlock = ({ children }: { children: React.ReactNode }) => (
-    <pre className="p-4 bg-muted rounded-md text-sm overflow-x-auto mt-2">
-        <code>
-            {children}
-        </code>
-    </pre>
-);
+const CodeBlock = ({ children }: { children: React.ReactNode }) => {
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(String(children).trim());
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
+    };
+
+    return (
+        <div className="relative group">
+            <pre className="p-4 bg-muted rounded-md text-sm overflow-x-auto mt-2 pr-12">
+                <code>
+                    {children}
+                </code>
+            </pre>
+            <Button
+                size="icon"
+                variant="ghost"
+                className="absolute top-2 right-2 h-7 w-7 text-muted-foreground hover:bg-background/50 hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={handleCopy}
+            >
+                {isCopied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
+                <span className="sr-only">Copiar código</span>
+            </Button>
+        </div>
+    );
+};
+
 
 export default function DocumentationPage() {
     return (

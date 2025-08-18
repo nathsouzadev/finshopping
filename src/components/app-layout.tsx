@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import Header from '@/components/header';
 import Logo from '@/components/logo';
-import { LayoutDashboard, Settings, ShoppingCart, History } from 'lucide-react';
+import { LayoutDashboard, Settings, ShoppingCart, History, BookText } from 'lucide-react';
 import type { Transaction } from '@/lib/types';
 
 
@@ -77,6 +77,20 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
                   <div>
                     <History />
                     <span>Minhas Compras</span>
+                  </div>
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/documentation">
+                <SidebarMenuButton
+                  isActive={pathname === '/documentation'}
+                  tooltip="Documentação"
+                  asChild
+                >
+                  <div>
+                    <BookText />
+                    <span>Documentação</span>
                   </div>
                 </SidebarMenuButton>
               </Link>

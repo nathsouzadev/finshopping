@@ -11,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import Header from '@/components/header';
 import Logo from '@/components/logo';
@@ -25,6 +26,11 @@ interface AppLayoutProps {
 
 const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    setOpenMobile(false);
+  };
 
   return (
     <>
@@ -40,7 +46,7 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
         <SidebarContent>
           <SidebarMenu className='p-2'>
             <SidebarMenuItem>
-              <Link href="/">
+              <Link href="/" onClick={handleLinkClick}>
                 <SidebarMenuButton
                   isActive={pathname === '/'}
                   tooltip="Dashboard"
@@ -54,7 +60,7 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/shopping">
+              <Link href="/shopping" onClick={handleLinkClick}>
                 <SidebarMenuButton
                   isActive={pathname === '/shopping'}
                   tooltip="Shopping"
@@ -68,7 +74,7 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
               </Link>
             </SidebarMenuItem>
              <SidebarMenuItem>
-              <Link href="/purchases">
+              <Link href="/purchases" onClick={handleLinkClick}>
                 <SidebarMenuButton
                   isActive={pathname === '/purchases'}
                   tooltip="Minhas Compras"
@@ -82,7 +88,7 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/documentation">
+              <Link href="/documentation" onClick={handleLinkClick}>
                 <SidebarMenuButton
                   isActive={pathname === '/documentation'}
                   tooltip="Documentação"
@@ -96,7 +102,7 @@ const AppLayout = ({ children, onNewTransaction }: AppLayoutProps) => {
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/settings">
+              <Link href="/settings" onClick={handleLinkClick}>
                 <SidebarMenuButton
                   isActive={pathname === '/settings'}
                   tooltip="Configurações"

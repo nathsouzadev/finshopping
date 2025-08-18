@@ -21,6 +21,7 @@ import {
 } from './ui/dialog';
 import Link from 'next/link';
 import { SidebarTrigger } from './ui/sidebar';
+import { ThemeSwitcher } from './theme-switcher';
 
 const Header = ({ onNewTransaction }: { onNewTransaction: (transaction: Omit<Transaction, 'id'>) => void }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -31,48 +32,49 @@ const Header = ({ onNewTransaction }: { onNewTransaction: (transaction: Omit<Tra
         <SidebarTrigger />
       </div>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <div className="ml-auto flex-1 sm:flex-initial">
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Nova Transação
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Nova Transação</DialogTitle>
-                <DialogDescription>
-                  Adicione uma nova entrada ou saída para gerenciar suas finanças.
-                </DialogDescription>
-              </DialogHeader>
-              <NewTransactionForm
-                onFormSubmit={(data) => {
-                  onNewTransaction(data);
-                  setIsDialogOpen(false);
-                }}
-              />
-            </DialogContent>
-          </Dialog>
+        <div className="ml-auto flex items-center gap-2">
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                <Button>
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Nova Transação
+                </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Nova Transação</DialogTitle>
+                    <DialogDescription>
+                    Adicione uma nova entrada ou saída para gerenciar suas finanças.
+                    </DialogDescription>
+                </DialogHeader>
+                <NewTransactionForm
+                    onFormSubmit={(data) => {
+                    onNewTransaction(data);
+                    setIsDialogOpen(false);
+                    }}
+                />
+                </DialogContent>
+            </Dialog>
+            <ThemeSwitcher />
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" size="icon" className="rounded-full">
+                    <CircleUser className="h-5 w-5" />
+                    <span className="sr-only">Toggle user menu</span>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                    <Link href="/settings">Configurações</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Suporte</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Sair</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="h-5 w-5" />
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/settings">Configurações</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>Suporte</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Sair</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>
   );

@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -64,19 +65,29 @@ const SettingsForm = () => {
   }, [form]);
 
   const testApiUrl = async (url: string): Promise<boolean> => {
+    setIsSaving(true);
     try {
       // We test the transactions endpoint as a prerequisite
       const testUrl = `${url.replace(/\/$/, '')}/transactions`;
       const response = await fetch(testUrl);
-      return response.ok;
+      if (!response.ok) {
+        throw new Error(`A API retornou o status ${response.status}`);
+      }
+      return true;
     } catch (error) {
       console.error("API test failed", error);
+      toast({
+        title: 'Falha na conexão',
+        description: 'Não foi possível conectar à URL base fornecida. Verifique a URL e tente novamente.',
+        variant: 'destructive',
+      });
       return false;
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const onSubmit = async (data: SettingsFormValues) => {
-    setIsSaving(true);
     const { apiBaseUrl } = data;
 
     const isApiValid = await testApiUrl(apiBaseUrl || '/api');
@@ -92,15 +103,8 @@ const SettingsForm = () => {
         description: 'A URL base da API foi atualizada. A aplicação será recarregada.',
       });
       // Reload the page to refetch all data with the new URL
-      setTimeout(() => window.location.reload(), 1500);
-    } else {
-      toast({
-        title: 'Falha na conexão',
-        description: 'Não foi possível conectar à URL base fornecida. Verifique a URL e tente novamente.',
-        variant: 'destructive',
-      });
+      setTimeout(() => window.location.reload(), 1000);
     }
-    setIsSaving(false);
   };
   
   const handleTestEndpoint = async () => {

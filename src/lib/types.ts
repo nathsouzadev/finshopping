@@ -8,13 +8,13 @@ export type Transaction = {
 };
 
 export type Product = {
-  id: number;
+  id: string;
   name: string;
   price: number;
 };
 
 export type CartItem = {
-  productId: number;
+  productId: string;
   quantity: number;
   name: string;
   price: number;

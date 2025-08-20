@@ -17,7 +17,7 @@ export default function ShoppingPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [cart, setCart] = useState<Map<number, number>>(new Map());
+  const [cart, setCart] = useState<Map<string, number>>(new Map());
   const { toast } = useToast();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 

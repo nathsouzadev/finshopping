@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'O valor total da compra excede o limite de R$20.000.' }, { status: 400 });
     }
 
-    const items: CartItem[] = (cart || []).map((item: {productId: number, quantity: number}) => {
+    const items: CartItem[] = (cart || []).map((item: {productId: string, quantity: number}) => {
         const product = products.find(p => p.id === item.productId);
         return {
             ...item,

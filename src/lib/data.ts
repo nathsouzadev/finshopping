@@ -86,7 +86,7 @@ export const transactions: Transaction[] = [
 export const purchases: Purchase[] = [
     {
         id: '1',
-        date: '2024-07-28T14:45:12Z',
+        date: '2024-07-28',
         total: 7850,
         items: [
             { productId: '1', quantity: 1, name: 'Notebook Gamer Pro', price: 7500 },
@@ -95,7 +95,7 @@ export const purchases: Purchase[] = [
     },
     {
         id: '2',
-        date: '2024-07-25T10:20:30Z',
+        date: '2024-07-25',
         total: 3100,
         items: [
             { productId: '4', quantity: 1, name: 'Monitor 4K 27"', price: 2500 },
@@ -104,7 +104,7 @@ export const purchases: Purchase[] = [
     },
     {
         id: '3',
-        date: '2024-07-22T18:05:00Z',
+        date: '2024-07-22',
         total: 1350,
         items: [
             { productId: '3', quantity: 1, name: 'Teclado Mecânico RGB', price: 550 },

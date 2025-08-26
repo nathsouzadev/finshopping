@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const newPurchase = {
         id: String(purchases.length + 1),
-        date: new Date().toISOString(),
+        date: new Date().toISOString().split('T')[0],
         total,
         items,
     };

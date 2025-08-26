@@ -89,6 +89,7 @@ const SettingsForm = () => {
 
   const onSubmit = async (data: SettingsFormValues) => {
     const { apiBaseUrl } = data;
+    console.log(apiBaseUrl)
 
     const isApiValid = await testApiUrl(apiBaseUrl || '/api');
 

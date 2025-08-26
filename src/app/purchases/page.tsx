@@ -52,7 +52,7 @@ export default function PurchasesPage() {
   };
   
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "'Em' dd 'de' MMMM, yyyy 'às' HH:mm", { locale: ptBR });
+    return format(new Date(dateString), "'Em' dd 'de' MMMM 'de' yyyy", { locale: ptBR });
   }
 
   return (

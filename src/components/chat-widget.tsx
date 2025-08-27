@@ -40,6 +40,19 @@ const ChatWidget = () => {
     };
 
     useEffect(() => {
+        if (isOpen && messages.length === 0) {
+            setMessages([
+                {
+                    id: 'initial-message',
+                    role: 'assistant',
+                    content: 'Sou sua assistente financeira e estou aqui para te ajudar com suas finanças.'
+                }
+            ]);
+        }
+    }, [isOpen, messages.length]);
+
+
+    useEffect(() => {
         scrollToBottom();
     }, [messages, isLoading]);
 

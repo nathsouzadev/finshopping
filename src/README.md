@@ -50,39 +50,14 @@ Retorna la lista de todos os produtos disponíveis na loja.
   ```json
   [
     {
-      "id": 1,
+      "id": "1",
       "name": "Notebook Gamer Pro",
       "price": 7500
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Mouse Sem Fio Ultra-leve",
       "price": 350
-    },
-    {
-      "id": 3,
-      "name": "Teclado Mecânico RGB",
-      "price": 550
-    },
-    {
-      "id": 4,
-      "name": "Monitor 4K 27\"",
-      "price": 2500
-    },
-    {
-      "id": 5,
-      "name": "Headset 7.1 Surround",
-      "price": 600
-    },
-    {
-      "id": 6,
-      "name": "Webcam Full HD",
-      "price": 400
-    },
-    {
-      "id": 7,
-      "name": "SSD NVMe 1TB",
-      "price": 800
     }
   ]
   ```
@@ -113,14 +88,6 @@ Retorna uma lista de transações financeiras. A lista pode ser filtrada usando 
       "amount": 5000,
       "type": "income",
       "category": "Salário"
-    },
-    {
-      "id": "2",
-      "date": "2024-07-15T12:30:00Z",
-      "description": "Aluguel",
-      "amount": 1500,
-      "type": "expense",
-      "category": "Moradia"
     }
   ]
   ```
@@ -190,8 +157,8 @@ Processa uma nova compra a partir do carrinho de compras.
   ```json
   {
     "cart": [
-      { "productId": 1, "quantity": 1 },
-      { "productId": 2, "quantity": 2 }
+      { "productId": "1", "quantity": 1 },
+      { "productId": "2", "quantity": 2 }
     ],
     "total": 8200
   }
@@ -200,17 +167,17 @@ Processa uma nova compra a partir do carrinho de compras.
   ```json
   {
     "id": "4",
-    "date": "2024-07-29T10:00:00.000Z",
+    "date": "2024-07-29",
     "total": 8200,
     "items": [
         {
-          "productId": 1,
+          "productId": "1",
           "quantity": 1,
           "name": "Notebook Gamer Pro",
           "price": 7500
         },
         {
-          "productId": 2,
+          "productId": "2",
           "quantity": 2,
           "name": "Mouse Sem Fio Ultra-leve",
           "price": 350
@@ -242,20 +209,14 @@ Retorna o histórico de todas as compras realizadas, ordenadas da mais recente p
   [
     {
       "id": "1",
-      "date": "2024-07-28T14:45:12Z",
+      "date": "2024-07-28",
       "total": 7850,
       "items": [
         {
-          "productId": 1,
+          "productId": "1",
           "quantity": 1,
           "name": "Notebook Gamer Pro",
           "price": 7500
-        },
-        {
-          "productId": 2,
-          "quantity": 1,
-          "name": "Mouse Sem Fio Ultra-leve",
-          "price": 350
         }
       ]
     }
@@ -273,20 +234,14 @@ Retorna uma compra específica pelo seu ID.
   ```json
   {
     "id": "1",
-    "date": "2024-07-28T14:45:12Z",
+    "date": "2024-07-28",
     "total": 7850,
     "items": [
       {
-        "productId": 1,
+        "productId": "1",
         "quantity": 1,
         "name": "Notebook Gamer Pro",
         "price": 7500
-      },
-      {
-        "productId": 2,
-        "quantity": 1,
-        "name": "Mouse Sem Fio Ultra-leve",
-        "price": 350
       }
     ]
   }
@@ -295,5 +250,33 @@ Retorna uma compra específica pelo seu ID.
   ```json
   {
     "message": "Compra não encontrada."
+  }
+  ```
+
+---
+
+### 4. Chat
+
+#### `POST /api/chat`
+
+Envia uma mensagem para o assistente virtual e recebe uma resposta.
+
+- **Método:** `POST`
+- **Corpo da Requisição:**
+  ```json
+  {
+    "message": "Qual foi meu maior gasto este mês?"
+  }
+  ```
+- **Resposta de Sucesso (200 OK):**
+  ```json
+  {
+    "reply": "Esta é uma resposta simulada. Em uma aplicação real, aqui estaria a resposta de um modelo de linguagem avançado."
+  }
+  ```
+- **Resposta de Erro (400 Bad Request):**
+  ```json
+  {
+    "message": "A mensagem não pode estar em branco."
   }
   ```

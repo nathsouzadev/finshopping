@@ -65,7 +65,7 @@ export default function DocumentationPage() {
                                     <p className="font-semibold mt-4">Resposta de Sucesso (200 OK):</p>
                                     <CodeBlock>{`[
     {
-        "id": 1,
+        "id": "1",
         "name": "Notebook Gamer Pro",
         "price": 7500
     },
@@ -150,11 +150,11 @@ export default function DocumentationPage() {
                                      <p className="font-semibold mt-4">Resposta de Sucesso (201 Created):</p>
                                     <CodeBlock>{`{
     "id": "4",
-    "date": "2024-07-29T10:00:00.000Z",
+    "date": "2024-07-29",
     "total": 8200,
     "items": [
         {
-          "productId": 1,
+          "productId": "1",
           "quantity": 1,
           "name": "Notebook Gamer Pro",
           "price": 7500
@@ -178,11 +178,11 @@ export default function DocumentationPage() {
                                      <CodeBlock>{`[
     {
         "id": "1",
-        "date": "2024-07-28T14:45:12Z",
+        "date": "2024-07-28",
         "total": 7850,
         "items": [
             {
-                "productId": 1,
+                "productId": "1",
                 "quantity": 1,
                 "name": "Notebook Gamer Pro",
                 "price": 7500
@@ -202,17 +202,41 @@ export default function DocumentationPage() {
                                     <p className="font-semibold mt-4">Resposta de Sucesso (200 OK):</p>
                                     <CodeBlock>{`{
     "id": "1",
-    "date": "2024-07-28T14:45:12Z",
+    "date": "2024-07-28",
     "total": 7850,
     "items": [
         {
-            "productId": 1,
+            "productId": "1",
             "quantity": 1,
             "name": "Notebook Gamer Pro",
             "price": 7500
         },
         ...
     ]
+}`}</CodeBlock>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        
+                        {/* Chat */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>4. Chat</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                <div>
+                                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                                        <Badge className="bg-sky-600 text-white hover:bg-sky-700">POST</Badge>
+                                        <span>/api/chat</span>
+                                    </h3>
+                                    <p className="text-muted-foreground mt-1">Envia uma mensagem para o assistente virtual e recebe uma resposta.</p>
+                                    <p className="font-semibold mt-4">Corpo da Requisição:</p>
+                                    <CodeBlock>{`{
+    "message": "Qual foi meu maior gasto este mês?"
+}`}</CodeBlock>
+                                    <p className="font-semibold mt-4">Resposta de Sucesso (200 OK):</p>
+                                    <CodeBlock>{`{
+    "reply": "Esta é uma resposta simulada..."
 }`}</CodeBlock>
                                 </div>
                             </CardContent>

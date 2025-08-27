@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { ThemeProvider } from '@/components/theme-provider';
+import ChatWidget from '@/components/chat-widget';
 
 export const metadata: Metadata = {
   title: 'Fino - Gerenciador Financeiro',
@@ -31,6 +32,7 @@ export default function RootLayout({
             <SidebarProvider>
               {children}
             </SidebarProvider>
+            <ChatWidget />
             <Toaster />
         </ThemeProvider>
       </body>

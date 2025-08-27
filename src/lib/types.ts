@@ -26,3 +26,9 @@ export type Purchase = {
   total: number;
   items: CartItem[];
 };
+
+export type ChatMessage = {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+};
